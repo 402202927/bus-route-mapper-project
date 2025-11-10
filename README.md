@@ -83,22 +83,27 @@ bus-route-mapper-project/
 
 <details>
 <summary>README_FULL.md (this file)</summary>
+   
 ```
 # (This file — read-only)
 Contains project documentation, file structure, user manual, and instructions.
 ```
+
 </details>
 <details>
 <summary>requirements.txt</summary>
+   
 ```
 # Python 3.13.9
 Django==5.2
 django-leaflet==0.32.0
 djangorestframework==3.20.0
 ```
+
 </details>
 <details>
 <summary>.gitignore</summary>
+   
 ```
 __pycache__/
 *.pyc
@@ -110,17 +115,21 @@ __pycache__/
 /media/
 staticfiles/
 ```
+
 </details>
 <details> 
 <summary>.env.example</summary>
+   
 ```
 DJANGO_SECRET_KEY=your_secret_key_here
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
 ```
+
 </details>
 <details>
 <summary>manage.py</summary>
+   
 ```
 #!/usr/bin/env python
 import os
@@ -139,9 +148,11 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
 </details>
 <details>
 <summary>config_options.py</summary>
+
 ```
 # Project-wide default configuration
 PROJECT_NAME = "Bus Route Mapper"
@@ -158,10 +169,12 @@ TIMETABLE_DIR = "golden_arrow_timetables"
 IMPORT_LOG_FILE = "data/imports.log"
 VERBOSE_LOGGING = True
 ```
+
 </details>
 <details>
 <summary>apply_config.py</summary>
 
+```
 #!/usr/bin/env python3
 """
 apply_config.py
@@ -191,18 +204,22 @@ if __name__ == "__main__":
     main()
 
 </details>
+```
 
 ### Config Folder
 
 <details>
 <summary>config/__init__.py</summary>
 
+```
 # Empty init for Django config package
+```
 
 </details>
 <details>
 <summary>config/settings.py</summary>
 
+```
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -263,11 +280,13 @@ DATABASES = {
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'mapper' / 'static']
+```
 
 </details>
 <details>
 <summary>config/urls.py</summary>
 
+```
 from django.contrib import admin
 from django.urls import path, include
 
@@ -275,28 +294,33 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('mapper.urls')),
 ]
+```
 
 </details>
 <details>
 <summary>config/wsgi.py</summary>
 
+```
 import os
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 application = get_wsgi_application()
+```
 
 </details>
 <details>
 <summary>config/asgi.py</summary>
 
+```
 import os
 from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 application = get_asgi_application()
+```
 
 </details>
 
