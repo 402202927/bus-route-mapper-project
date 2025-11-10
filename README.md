@@ -34,37 +34,37 @@ bus-route-mapper-project/
 │     └── asgi.py
 │
 ├── mapper/
-│ ├── init.py
-│ ├── admin.py
-│ ├── apps.py
-│ ├── models.py
-│ ├── serializers.py
-│ ├── views.py
-│ ├── urls.py
-│ ├── tests.py
-│ ├── config_data.json
-│ ├── templates/
-│ │ └── mapper/
-│ │ ├── base.html
-│ │ ├── index.html
-│ │ └── configure.html
-│ └── static/
-│ └── mapper/
-│ ├── css/
-│ │ └── style.css
-│ ├── js/
-│ │ └── map.js
-│ └── img/
-│ └── icons/
-│ └── bus-stop.png
+│    ├── init.py
+│    ├── admin.py
+│    ├── apps.py
+│    ├── models.py
+│    ├── serializers.py
+│    ├── views.py
+│    ├── urls.py
+│    ├── tests.py
+│    ├── config_data.json
+│    ├── templates/
+│    │    └── mapper/
+│    │          ├── base.html
+│    │          ├── index.html
+│    │          └── configure.html
+│    └── static/
+│           └── mapper/
+│                ├── css/
+│                │    └── style.css
+│                ├── js/
+│                │    └── map.js
+│                └── img/
+│                      └── icons/
+│                            └── bus-stop.png
 │
 ├── data/
-│ ├── raw/
-│ ├── processed/
-│ └── imports.log
+│    ├── raw/
+│    ├── processed/
+│    └── imports.log
 │
 ├── docs/
-│ └── PresentationSlides.pptx
+│    └── PresentationSlides.pptx
 │
 ├── config_options.py
 ├── apply_config.py
