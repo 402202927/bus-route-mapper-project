@@ -531,7 +531,7 @@ It is an academic prototype, suitable for demonstrating data visualization and g
 
 ### USER
 
-Using the mapper as a user:
+**Using the mapper as a user:**
 
 1. Navigate to the web app index page (/) after starting the Django server:
    
@@ -559,7 +559,7 @@ Note: End users do not edit configurations; they only interact with the map.
 
 ### SETUP
 
-Maintainer configuration instructions:
+**Maintainer configuration instructions:**
 
 1. Environment setup:
 
@@ -595,7 +595,7 @@ Maintainer configuration instructions:
 
 ### TROUBLESHOOT
 
-Common issues & fixes:
+**Common issues & fixes:**
 
 1. Server won’t start
    
@@ -623,30 +623,48 @@ Common issues & fixes:
 
 ## Index
 
-Web pages:
+**Web pages**
 
-/                         ==>    Map interface
-/admin/configure.html     ==>    Configuration UI
+/                             ==>       Map interface
+/admin/configure.html         ==>       Configuration UI
 
-API:
+**API**
 
 /api/busstops/             
 /api/busroutes/
 /api/trips/
-/api/config/               ==>   GET/POST configuration
+/api/config/                   ==>      GET/POST configuration
 
-Python scripts:
+**Python scripts**
 
-apply_config.py            ==>   Applies config options to project (read/write)
-config_options.py          ==>   Default project settings
+apply_config.py                ==>      Applies config options to project (read/write)
+config_options.py              ==>      Default project settings
 
-Data:
+**Data**
 
-mapper/config_data.json    ==>   JSON storage for configuration UI
-data/raw/ 
+mapper/config_data.json        ==>      JSON storage for configuration UI
+data/raw/                      ==>      Original imported OSM and timetable files
+data/processed/                ==>      Processed GeoJSON and timetable data
+data/imports.log               ==>      Logs of import operations
 
+**Docs**
 
+docs/PresentationSlides.pptx   ==>      Stakeholder presentation
 
+**Configuration**
 
+config_options.py              ==>      Default Python configuration (editable)
+apply_config.py                ==>      Script to apply configuration
+/admin/configure.html          ==>      Web interface for updating mapper/config_data.json
+                                        (independent of Python config)
+
+**Project structure**
+
+config/                        ==>      Django settings, URLs, WSGI/ASGI
+mapper/                        ==>      Main Django app (models, views, templates, static files)
+requirements.txt               ==>      Dependencies
+.env.example                   ==>      Example environment variables
+.gitignore                     ==>      Ignored files
+manage.py                      ==>      Django management script
 
    
