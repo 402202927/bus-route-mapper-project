@@ -206,6 +206,8 @@ if __name__ == "__main__":
 </details>
 ```
 
+---
+
 ### Config Folder
 
 <details>
@@ -323,6 +325,8 @@ application = get_asgi_application()
 ```
 
 </details>
+
+---
 
 ### Mapper App
 
@@ -506,6 +510,8 @@ loadConfig();
 ```
 </details>
 
+---
+
 ### Docs Folder
 
 <details>
@@ -521,6 +527,7 @@ Binary PowerPoint file (presentation for stakeholders):
 </details>
 
 ---
+
 ## User Manual
 
 
