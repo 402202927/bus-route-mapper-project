@@ -203,10 +203,9 @@ def main():
 if __name__ == "__main__":
     main()
 
-</details>
 ```
+</details>
 
----
 
 ### Config Folder
 
@@ -326,7 +325,6 @@ application = get_asgi_application()
 
 </details>
 
----
 
 ### Mapper App
 
@@ -510,7 +508,6 @@ loadConfig();
 ```
 </details>
 
----
 
 ### Docs Folder
 
@@ -629,6 +626,7 @@ Note: End users do not edit configurations; they only interact with the map.
    - Ensure read/write permissions for data/, mapper/config_data.json.
 
 ---
+
 ## Index
 
 **Web pages**
