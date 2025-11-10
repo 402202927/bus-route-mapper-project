@@ -520,6 +520,7 @@ Binary PowerPoint file (presentation for stakeholders):
 ```
 </details>
 
+---
 ## User Manual
 
 
@@ -620,7 +621,7 @@ Note: End users do not edit configurations; they only interact with the map.
 
    - Ensure read/write permissions for data/, mapper/config_data.json.
 
-
+---
 ## Index
 
 **Web pages**
@@ -667,4 +668,4 @@ requirements.txt               ==>      Dependencies
 .gitignore                     ==>      Ignored files
 manage.py                      ==>      Django management script
 
-   
+---   
