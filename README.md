@@ -629,48 +629,62 @@ Note: End users do not edit configurations; they only interact with the map.
 
 ## Index
 
+
 **Web pages**
 
+```
 /                             ==>       Map interface
 /admin/configure.html         ==>       Configuration UI
+```
 
 **API**
 
+```
 /api/busstops/             
 /api/busroutes/
 /api/trips/
 /api/config/                   ==>      GET/POST configuration
+```
 
 **Python scripts**
 
+```
 apply_config.py                ==>      Applies config options to project (read/write)
 config_options.py              ==>      Default project settings
+```
 
 **Data**
 
+```
 mapper/config_data.json        ==>      JSON storage for configuration UI
 data/raw/                      ==>      Original imported OSM and timetable files
 data/processed/                ==>      Processed GeoJSON and timetable data
 data/imports.log               ==>      Logs of import operations
+```
 
 **Docs**
 
+```
 docs/PresentationSlides.pptx   ==>      Stakeholder presentation
+```
 
 **Configuration**
 
+```
 config_options.py              ==>      Default Python configuration (editable)
 apply_config.py                ==>      Script to apply configuration
 /admin/configure.html          ==>      Web interface for updating mapper/config_data.json
                                         (independent of Python config)
+```
 
 **Project structure**
 
+```
 config/                        ==>      Django settings, URLs, WSGI/ASGI
 mapper/                        ==>      Main Django app (models, views, templates, static files)
 requirements.txt               ==>      Dependencies
 .env.example                   ==>      Example environment variables
 .gitignore                     ==>      Ignored files
 manage.py                      ==>      Django management script
-
+```
 ---   
