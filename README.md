@@ -23,7 +23,7 @@ This project allows visualization of bus stops, routes, and timetables for Golde
 ---
 
 ## Folder Structure
-
+```
 bus-route-mapper-project/
 │
 ├── config/
@@ -73,7 +73,7 @@ bus-route-mapper-project/
 ├── .env.example
 ├── README_FULL.md
 └── .gitignore
-
+```
 
 ---
 
