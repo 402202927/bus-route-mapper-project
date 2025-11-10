@@ -324,4 +324,329 @@ application = get_asgi_application()
 
 </details>
 
+### Mapper App
 
+<details>
+<summary>mapper/config_data.json</summary>
+
+```
+{
+    "PROJECT_NAME": "Bus Route Mapper",
+    "AUTHOR": "Grant Graham Cloete",
+    "DEBUG": true,
+    "DEFAULT_TIMEZONE": "Africa/Johannesburg",
+    "DEFAULT_MAP_CENTER": [-33.9249, 18.4241],
+    "DEFAULT_MAP_ZOOM": 12,
+    "MAP_TILE_PROVIDER": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "DATA_RAW_PATH": "data/raw",
+    "DATA_PROCESSED_PATH": "data/processed",
+    "OSM_GEOJSON_FILENAME": "osm_bus_stops.geojson",
+    "TIMETABLE_DIR": "golden_arrow_timetables",
+    "IMPORT_LOG_FILE": "data/imports.log",
+    "VERBOSE_LOGGING": true
+}
+```
+</details>
+<details> 
+<summary>mapper/views.py</summary>
+
+```
+import os
+import json
+from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from rest_framework import viewsets
+from .models import BusStop, BusRoute, Trip
+from .serializers import BusStopSerializer, BusRouteSerializer, TripSerializer
+
+class BusStopViewSet(viewsets.ModelViewSet):
+    queryset = BusStop.objects.all()
+    serializer_class = BusStopSerializer
+
+class BusRouteViewSet(viewsets.ModelViewSet):
+    queryset = BusRoute.objects.all()
+    serializer_class = BusRouteSerializer
+
+class TripViewSet(viewsets.ModelViewSet):
+    queryset = Trip.objects.all()
+    serializer_class = TripSerializer
+
+def index(request):
+    return render(request, "mapper/index.html", context={})
+
+APP_DIR = os.path.dirname(__file__)
+CONFIG_JSON_PATH = os.path.join(APP_DIR, "config_data.json")
+
+def load_config():
+    if not os.path.exists(CONFIG_JSON_PATH):
+        return {}
+    try:
+        with open(CONFIG_JSON_PATH, "r", encoding="utf-8") as fh:
+            return json.load(fh)
+    except Exception:
+        return {}
+
+def save_config(data):
+    if not isinstance(data, dict):
+        raise ValueError("Config data must be a JSON object.")
+    os.makedirs(os.path.dirname(CONFIG_JSON_PATH), exist_ok=True)
+    with open(CONFIG_JSON_PATH, "w", encoding="utf-8") as fh:
+        json.dump(data, fh, indent=4, ensure_ascii=False)
+
+def configure_page(request):
+    return render(request, "mapper/configure.html")
+
+@method_decorator(csrf_exempt, name="dispatch")
+def api_config(request):
+    if request.method == "GET":
+        data = load_config()
+        return JsonResponse(data, safe=False)
+    if request.method == "POST":
+        try:
+            payload = json.loads(request.body.decode("utf-8"))
+        except Exception:
+            return HttpResponseBadRequest("Invalid JSON payload.")
+        try:
+            save_config(payload)
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+        return JsonResponse({"status": "ok", "message": "Configuration saved successfully."})
+    return JsonResponse({"error": "Method not allowed."}, status=405)
+```
+</details>
+<details>
+<summary>mapper/urls.py</summary>
+
+```
+from django.urls import path, include
+from rest_framework import routers
+from . import views
+
+router = routers.DefaultRouter()
+router.register(r'busstops', views.BusStopViewSet)
+router.register(r'busroutes', views.BusRouteViewSet)
+router.register(r'trips', views.TripViewSet)
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('api/', include(router.urls)),
+    path('admin/configure.html', views.configure_page, name='configure_page'),
+    path('api/config/', views.api_config, name='api_config'),
+]
+```
+</details>
+<details>
+<summary>mapper/templates/mapper/configure.html</summary>
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Configure - Bus Route Mapper</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:24px}
+label{display:block;margin-top:10px;font-weight:600}
+input,textarea,select{width:100%;padding:8px;box-sizing:border-box;margin-top:6px}
+textarea{min-height:110px;font-family:monospace}
+.actions{margin-top:16px}
+button{padding:10px 14px}
+.msg{margin-top:8px;color:green}
+.error{margin-top:8px;color:red}
+</style>
+</head>
+<body>
+<h1>Project Configuration</h1>
+<p>Edit project configuration. Saved to mapper/config_data.json</p>
+
+<form id="cfg-form">
+<label>Raw JSON
+<textarea id="rawjson"></textarea>
+</label>
+<div class="actions">
+<button id="btn-save" type="submit">Save Configuration</button>
+<button id="btn-refresh" type="button">Reload</button>
+</div>
+<div id="status" class="msg"></div>
+<div id="error" class="error"></div>
+</form>
+
+<script>
+async function loadConfig(){
+document.getElementById('status').textContent='Loading...';
+document.getElementById('error').textContent='';
+try{
+const resp=await fetch('/api/config/');
+const data=await resp.json();
+document.getElementById('rawjson').value=JSON.stringify(data,null,4);
+document.getElementById('status').textContent='Configuration loaded.';
+}catch(err){
+document.getElementById('error').textContent=err.toString();
+document.getElementById('status').textContent='';
+}}
+async function saveConfig(e){
+e.preventDefault();
+document.getElementById('status').textContent='Saving...';
+document.getElementById('error').textContent='';
+try{
+const parsed=JSON.parse(document.getElementById('rawjson').value);
+const resp=await fetch('/api/config/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(parsed)});
+const result=await resp.json();
+if(!resp.ok) throw new Error(result.message||'Save failed');
+document.getElementById('status').textContent=result.message||'Saved successfully.';
+}catch(err){document.getElementById('error').textContent=err.toString();document.getElementById('status').textContent='';}}
+document.getElementById('cfg-form').addEventListener('submit',saveConfig);
+document.getElementById('btn-refresh').addEventListener('click',loadConfig);
+loadConfig();
+</script>
+</body>
+</html>
+```
+</details>
+
+### Docs Folder
+
+<details>
+<summary>docs/PresentationSlides.pptx</summary>
+
+```
+Binary PowerPoint file (presentation for stakeholders):
+- Explains project purpose, architecture, and usage
+- Screenshots of bus map interface
+- Example workflows for end users
+- Maintainer overview for setup and configuration
+```
+</details>
+
+## User Manual
+
+
+### INTRODUCTION
+
+The Bus Route Mapper Project is a Django web application that visualizes bus stops, routes, and timetable information for Golden Arrow buses.
+It is an academic prototype, suitable for demonstrating data visualization and geospatial analysis.
+
+
+### USER
+
+Using the mapper as a user:
+
+1. Navigate to the web app index page (/) after starting the Django server:
+   
+   ```
+   python manage.py runserver
+   ```
+   Open: http://127.0.0.1:8000/
+
+2. View the map:
+
+   - Bus stops are shown as icons.
+   - Click a stop to see its name, routes served, and next trips.
+
+3. Filter or search:
+
+   - Use any built-in filtering or search fields to locate stops or routes.
+
+4. Interaction:
+
+   - Pan, zoom, or click icons to explore route relationships.
+   - Leaflet allows standard map gestures.
+
+Note: End users do not edit configurations; they only interact with the map.
+   
+
+### SETUP
+
+Maintainer configuration instructions:
+
+1. Environment setup:
+
+   - Python 3.13.9
+   - Install dependencies:
+
+   ```
+   pip install -r requirements.txt
+   ```   
+
+2. Configuration:
+
+   - Use /admin/configure.html to update config_data.json.
+   - apply_config.py and config_options.py can be updated manually or via scripts; web UI is independent.
+
+3. Common configuration errors:
+
+   - Incorrect JSON syntax in config_data.json → use web UI or JSON validator.
+   - Invalid paths for OSM or timetable data → verify DATA_RAW_PATH and TIMETABLE_DIR.\
+   - Missing Leaflet tiles → check MAP_TILE_PROVIDER URL.
+
+4. Database:
+
+   ```
+   python manage.py migrate
+   ```
+
+5. Starting server:
+
+   ```
+   python manage.py runserver
+   ```
+
+### TROUBLESHOOT
+
+Common issues & fixes:
+
+1. Server won’t start
+   
+   - Check DEBUG=True and Python/Django versions.
+   - Verify dependencies installed from requirements.txt.
+
+2. Map not loading tiles
+
+   - Check internet access.
+   - Ensure MAP_TILE_PROVIDER URL is correct in config_data.json.
+
+3. Bus stops missing
+
+   - Re-run apply_config.py to refresh OSM/timetable data.
+
+4. Configuration changes not applied
+
+   - Confirm /admin/configure.html saved correctly.
+   - Ensure JSON valid (no trailing commas, correct brackets).
+
+5. Permissions errors
+
+   - Ensure read/write permissions for data/, mapper/config_data.json.
+
+
+## Index
+
+Web pages:
+
+/                         ==>    Map interface
+/admin/configure.html     ==>    Configuration UI
+
+API:
+
+/api/busstops/             
+/api/busroutes/
+/api/trips/
+/api/config/               ==>   GET/POST configuration
+
+Python scripts:
+
+apply_config.py            ==>   Applies config options to project (read/write)
+config_options.py          ==>   Default project settings
+
+Data:
+
+mapper/config_data.json    ==>   JSON storage for configuration UI
+data/raw/ 
+
+
+
+
+
+   
