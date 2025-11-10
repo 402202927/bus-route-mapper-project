@@ -1,1 +1,14 @@
+# Project-wide default configuration
 PROJECT_NAME = "Bus Route Mapper"
+AUTHOR = "Grant Graham Cloete"
+DEBUG = True
+DEFAULT_TIMEZONE = "Africa/Johannesburg"
+DEFAULT_MAP_CENTER = [-33.9249, 18.4241]
+DEFAULT_MAP_ZOOM = 12
+MAP_TILE_PROVIDER = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+DATA_RAW_PATH = "data/raw"
+DATA_PROCESSED_PATH = "data/processed"
+OSM_GEOJSON_FILENAME = "osm_bus_stops.geojson"
+TIMETABLE_DIR = "golden_arrow_timetables"
+IMPORT_LOG_FILE = "data/imports.log"
+VERBOSE_LOGGING = True
