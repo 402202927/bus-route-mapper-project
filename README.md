@@ -27,14 +27,14 @@ This project allows visualization of bus stops, routes, and timetables for Golde
 bus-route-mapper-project/
 │
 ├── config/
-│     ├── init.py
+│     ├── __init__.py
 │     ├── settings.py
 │     ├── urls.py
 │     ├── wsgi.py
 │     └── asgi.py
 │
 ├── mapper/
-│    ├── init.py
+│    ├── __init__.py
 │    ├── admin.py
 │    ├── apps.py
 │    ├── models.py
