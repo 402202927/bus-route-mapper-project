@@ -506,8 +506,121 @@ loadConfig();
 </body>
 </html>
 ```
-</details>
 
+</details>
+<details>
+<summary>mapper/static/mapper/css/style.css</summary>
+
+```
+body { font-family: Arial, Helvetica, sans-serif; }
+#map { height: 600px; width: 100%; }
+```
+
+</details>
+<details>
+<summary>mapper/static/mapper/js/map.js</summary>
+
+```
+var map = L.map('map').setView([-33.9249, 18.4241], 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+```
+
+<details>
+<summary>mapper/models.py</summary>
+
+```
+from django.db import models
+
+class BusStop(models.Model):
+    stop_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=200)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+
+    def __str__(self):
+        return self.name
+
+class BusRoute(models.Model):
+    route_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=200)
+    stops = models.ManyToManyField(BusStop, related_name='routes')
+
+    def __str__(self):
+        return self.name
+
+class Trip(models.Model):
+    trip_id = models.CharField(max_length=50, unique=True)
+    route = models.ForeignKey(BusRoute, on_delete=models.CASCADE, related_name='trips')
+    departure_time = models.TimeField()
+    arrival_time = models.TimeField()
+
+    def __str__(self):
+        return f"{self.route.name} - {self.trip_id}"
+
+```
+</details>
+<details>
+<summary>mapper/serializers.py</summary>
+
+```
+from rest_framework import serializers
+from .models import BusStop, BusRoute, Trip
+
+class BusStopSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BusStop
+        fields = '__all__'
+
+class BusRouteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BusRoute
+        fields = '__all__'
+
+class TripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trip
+        fields = '__all__'
+
+```
+</details>
+<details>
+<summary>mapper/templates/mapper/base.html</summary>
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}Bus Route Mapper{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'mapper/css/style.css' %}">
+</head>
+<body>
+<header>
+<h1>{% block header %}Bus Route Mapper{% endblock %}</h1>
+</header>
+<main>{% block content %}{% endblock %}</main>
+<footer>{% block footer %}© Grant Graham Cloete{% endblock %}</footer>
+</body>
+</html>
+
+```
+</details>
+<details>
+<summary>mapper/templates/mapper/index.html</summary>
+
+```
+{% extends "mapper/base.html" %}
+
+{% block title %}Bus Map{% endblock %}
+{% block content %}
+<div id="map" style="width:100%;height:600px;"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="{% static 'mapper/js/map.js' %}"></script>
+{% endblock %}
+
+```
 
 ### Docs Folder
 
