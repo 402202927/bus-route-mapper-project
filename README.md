@@ -83,23 +83,23 @@ bus-route-mapper-project/
 
 <details>
 <summary>README_FULL.md (this file)</summary>
-
+```
 # (This file — read-only)
 Contains project documentation, file structure, user manual, and instructions.
-
+```
 </details>
 <details>
 <summary>requirements.txt</summary>
-
+```
 # Python 3.13.9
 Django==5.2
 django-leaflet==0.32.0
 djangorestframework==3.20.0
-
+```
 </details>
 <details>
 <summary>.gitignore</summary>
-
+```
 __pycache__/
 *.pyc
 *.pyo
@@ -109,19 +109,19 @@ __pycache__/
 *.log
 /media/
 staticfiles/
-
+```
 </details>
 <details> 
 <summary>.env.example</summary>
-
+```
 DJANGO_SECRET_KEY=your_secret_key_here
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
-
+```
 </details>
 <details>
 <summary>manage.py</summary>
-
+```
 #!/usr/bin/env python
 import os
 import sys
@@ -138,11 +138,11 @@ def main():
 
 if __name__ == '__main__':
     main()
-
+```
 </details>
 <details>
 <summary>config_options.py</summary>
-
+```
 # Project-wide default configuration
 PROJECT_NAME = "Bus Route Mapper"
 AUTHOR = "Grant Graham Cloete"
@@ -157,7 +157,7 @@ OSM_GEOJSON_FILENAME = "osm_bus_stops.geojson"
 TIMETABLE_DIR = "golden_arrow_timetables"
 IMPORT_LOG_FILE = "data/imports.log"
 VERBOSE_LOGGING = True
-
+```
 </details>
 <details>
 <summary>apply_config.py</summary>
