@@ -1,1 +1,8 @@
-<!-- index template -->
+{% extends "mapper/base.html" %}
+
+{% block title %}Bus Map{% endblock %}
+{% block content %}
+<div id="map" style="width:100%;height:600px;"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="{% static 'mapper/js/map.js' %}"></script>
+{% endblock %}
