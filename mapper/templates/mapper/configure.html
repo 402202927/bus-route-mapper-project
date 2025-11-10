@@ -1,1 +1,62 @@
-<!-- configure template -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Configure - Bus Route Mapper</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:24px}
+label{display:block;margin-top:10px;font-weight:600}
+input,textarea,select{width:100%;padding:8px;box-sizing:border-box;margin-top:6px}
+textarea{min-height:110px;font-family:monospace}
+.actions{margin-top:16px}
+button{padding:10px 14px}
+.msg{margin-top:8px;color:green}
+.error{margin-top:8px;color:red}
+</style>
+</head>
+<body>
+<h1>Project Configuration</h1>
+<p>Edit project configuration. Saved to mapper/config_data.json</p>
+
+<form id="cfg-form">
+<label>Raw JSON
+<textarea id="rawjson"></textarea>
+</label>
+<div class="actions">
+<button id="btn-save" type="submit">Save Configuration</button>
+<button id="btn-refresh" type="button">Reload</button>
+</div>
+<div id="status" class="msg"></div>
+<div id="error" class="error"></div>
+</form>
+
+<script>
+async function loadConfig(){
+document.getElementById('status').textContent='Loading...';
+document.getElementById('error').textContent='';
+try{
+const resp=await fetch('/api/config/');
+const data=await resp.json();
+document.getElementById('rawjson').value=JSON.stringify(data,null,4);
+document.getElementById('status').textContent='Configuration loaded.';
+}catch(err){
+document.getElementById('error').textContent=err.toString();
+document.getElementById('status').textContent='';
+}}
+async function saveConfig(e){
+e.preventDefault();
+document.getElementById('status').textContent='Saving...';
+document.getElementById('error').textContent='';
+try{
+const parsed=JSON.parse(document.getElementById('rawjson').value);
+const resp=await fetch('/api/config/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(parsed)});
+const result=await resp.json();
+if(!resp.ok) throw new Error(result.message||'Save failed');
+document.getElementById('status').textContent=result.message||'Saved successfully.';
+}catch(err){document.getElementById('error').textContent=err.toString();document.getElementById('status').textContent='';}}
+document.getElementById('cfg-form').addEventListener('submit',saveConfig);
+document.getElementById('btn-refresh').addEventListener('click',loadConfig);
+loadConfig();
+</script>
+</body>
+</html>
