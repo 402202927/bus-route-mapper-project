@@ -349,6 +349,46 @@ application = get_asgi_application()
 }
 ```
 </details>
+<details>
+<summary>mapper/admin.py</summary>
+
+```
+from django.contrib import admin
+from .models import BusStop, BusRoute, Trip
+
+@admin.register(BusStop)
+class BusStopAdmin(admin.ModelAdmin):
+    list_display = ('stop_id', 'name', 'latitude', 'longitude')
+    search_fields = ('name', 'stop_id')
+
+@admin.register(BusRoute)
+class BusRouteAdmin(admin.ModelAdmin):
+    list_display = ('route_id', 'name')
+    search_fields = ('name', 'route_id')
+    filter_horizontal = ('stops',)
+
+@admin.register(Trip)
+class TripAdmin(admin.ModelAdmin):
+    list_display = ('trip_id', 'route', 'departure_time', 'arrival_time')
+    list_filter = ('route',)
+
+```
+
+</details>
+<details>
+<summary>mapper/apps.py</summary>
+
+```
+from django.apps import AppConfig
+
+class MapperConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'mapper'
+    verbose_name = "Bus Route Mapper"
+
+```
+
+</details>
 <details> 
 <summary>mapper/views.py</summary>
 
