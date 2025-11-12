@@ -1,6 +1,6 @@
 # Bus Route Mapper Project
 
-A complete academic prototype for interactive bus route mapping using Django 5.2, Leaflet 0.32.0, and Python 3.13.9.  
+A complete academic prototype for interactive bus route mapping using Python 3.13.9, Django 5.2, django-leaflet 0.32.0, and djangorestframework.  
 This project allows visualization of bus stops, routes, and timetables for Golden Arrow bus services.
 
 ---
@@ -683,14 +683,17 @@ class TripSerializer(serializers.ModelSerializer):
 ### Docs Folder
 
 <details>
-<summary>docs/PresentationSlides.pptx</summary>
+<summary>docs/Presentation.pptx</summary>
 
 ```
-Binary PowerPoint file (presentation for stakeholders):
-- Explains project purpose, architecture, and usage
-- Screenshots of bus map interface
-- Example workflows for end users
-- Maintainer overview for setup and configuration
+Binary Microsoft PowerPoint file (presentation for sponsors/stakeholders):
+```
+</details>
+<details>
+<summary>docs/Project.docx</summary>
+
+```
+Binary Microsoft Word file (project report for sponsors/stakeholders):
 ```
 </details>
 
@@ -707,7 +710,7 @@ It is an academic prototype, suitable for demonstrating data visualization and g
 
 ### USER
 
-**Using the mapper as a user:**
+**Using the mapper:**
 
 1. Navigate to the web app index page (/) after starting the Django server:
    
@@ -735,39 +738,50 @@ Note: End users do not edit configurations; they only interact with the map.
 
 ### SETUP
 
-**Maintainer configuration instructions:**
+**Configuring the mapper:**
 
-1. Environment setup:
+1. Environment setup (Windows 11):
 
-   - Python 3.13.9
-   - Install dependencies:
+    - Install Python 3.13.9 (https://www.python.org/downloads/windows/)
+    - Install Github 2.51.2 (https://git-scm.com/install/windows)
 
-   ```
-   pip install -r requirements.txt
-   ```   
+    - Clone the online git repository to your computer by running the following in command prompt:
+
+        ```
+        git clone https://github.com/402202927/bus-route-mapper-project/
+        cd bus-route-mapper-project
+        ```
+
+    - Create and activate virtual environment for project
+
+        ```
+        python -m venv venv
+        venv\scripts\activate
+        ```
+
+    - Install required dependencies:
+
+        ```
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        ```   
 
 2. Configuration:
 
-   - Use /admin/configure.html to update config_data.json.
-   - apply_config.py and config_options.py can be updated manually or via scripts; web UI is independent.
+    - Use /admin/configure.html to update config_data.json.
+    - apply_config.py and config_options.py can be updated manually or via scripts; web UI is independent.
 
-3. Common configuration errors:
+3. Database Setup:
 
-   - Incorrect JSON syntax in config_data.json → use web UI or JSON validator.
-   - Invalid paths for OSM or timetable data → verify DATA_RAW_PATH and TIMETABLE_DIR.\
-   - Missing Leaflet tiles → check MAP_TILE_PROVIDER URL.
+    ```
+    python manage.py migrate
+    ```
 
-4. Database:
+4. Starting server:
 
-   ```
-   python manage.py migrate
-   ```
-
-5. Starting server:
-
-   ```
-   python manage.py runserver
-   ```
+    ```
+    python manage.py runserver
+    ```
 
 ### TROUBLESHOOT
 
@@ -778,7 +792,7 @@ Note: End users do not edit configurations; they only interact with the map.
    - Check DEBUG=True and Python/Django versions.
    - Verify dependencies installed from requirements.txt.
 
-2. Map not loading tiles
+2. Map not loading background/tiles
 
    - Check internet access.
    - Ensure MAP_TILE_PROVIDER URL is correct in config_data.json.
@@ -790,7 +804,7 @@ Note: End users do not edit configurations; they only interact with the map.
 4. Configuration changes not applied
 
    - Confirm /admin/configure.html saved correctly.
-   - Ensure JSON valid (no trailing commas, correct brackets).
+   - Ensure config_data.json valid (no trailing commas, correct brackets).
 
 5. Permissions errors
 
@@ -804,8 +818,8 @@ Note: End users do not edit configurations; they only interact with the map.
 **Web pages**
 
 ```
-/                             ==>       Map interface
-/admin/configure.html         ==>       Configuration UI
+/                               ==>       Map interface
+/admin/configure.html           ==>       Configuration webpage
 ```
 
 **API**
@@ -814,48 +828,49 @@ Note: End users do not edit configurations; they only interact with the map.
 /api/busstops/             
 /api/busroutes/
 /api/trips/
-/api/config/                   ==>      GET/POST configuration
+/api/config/                    ==>      GET/POST configuration
 ```
 
 **Python scripts**
 
 ```
-apply_config.py                ==>      Applies config options to project (read/write)
-config_options.py              ==>      Default project settings
+apply_config.py                 ==>      Applies config options to project (read/write)
+config_options.py               ==>      Default project settings
 ```
 
 **Data**
 
 ```
-mapper/config_data.json        ==>      JSON storage for configuration UI
-data/raw/                      ==>      Original imported OSM and timetable files
-data/processed/                ==>      Processed GeoJSON and timetable data
-data/imports.log               ==>      Logs of import operations
+mapper/config_data.json         ==>      JSON storage for configuration webpage
+data/raw/                       ==>      Original imported OSM and timetable files
+data/processed/                 ==>      Processed GeoJSON and timetable data
+data/imports.log                ==>      Logs of import operations
 ```
 
 **Docs**
 
 ```
-docs/PresentationSlides.pptx   ==>      Stakeholder presentation
+docs/PresentationSlides.pptx    ==>      Stakeholder presentation
+docs/Project.docx               ==>     Project report
 ```
 
 **Configuration**
 
 ```
-config_options.py              ==>      Default Python configuration (editable)
-apply_config.py                ==>      Script to apply configuration
-/admin/configure.html          ==>      Web interface for updating mapper/config_data.json
+config_options.py               ==>      Default Python configuration (editable)
+apply_config.py                 ==>      Script to apply configuration
+/admin/configure.html           ==>      Web interface for updating mapper/config_data.json
                                         (independent of Python config)
 ```
 
 **Project structure**
 
 ```
-config/                        ==>      Django settings, URLs, WSGI/ASGI
-mapper/                        ==>      Main Django app (models, views, templates, static files)
-requirements.txt               ==>      Dependencies
-.env.example                   ==>      Example environment variables
-.gitignore                     ==>      Ignored files
-manage.py                      ==>      Django management script
+config/                         ==>      Django settings, URLs, WSGI/ASGI
+mapper/                         ==>      Main Django app (models, views, templates, static files)
+manage.py                       ==>      Django management script
+requirements.txt                ==>      Software dependencies
+.env.example                    ==>      Example environment variables (passwords, allowed host IPs)
+.gitignore                      ==>      Git ignored files
 ```
 ---   
