@@ -1,6 +1,6 @@
 # Bus Route Mapper Project
 
-A complete academic prototype for interactive bus route mapping using Python 3.13.9, Django 5.2, django-leaflet 0.32.0, and djangorestframework.  
+A complete academic prototype for interactive bus route mapping using Python 3.13.9, Django 5.2.8, django-leaflet 0.32.0, and djangorestframework.  
 This project allows visualization of bus stops, routes, and timetables for Golden Arrow bus services.
 
 ---
