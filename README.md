@@ -56,7 +56,8 @@ bus-route-mapper-project/
 │                │    └── map.js
 │                └── img/
 │                      └── icons/
-│                            └── bus-stop.png
+│                            ├── bus-stop.png
+│                            └── bus-stop.svg
 │
 ├── data/
 │    ├── raw/
