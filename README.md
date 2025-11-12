@@ -389,6 +389,21 @@ class MapperConfig(AppConfig):
 ```
 
 </details>
+<details>
+<summary>mapper/tests.py</summary>
+
+```
+from django.test import TestCase
+from .models import BusStop
+
+class BusStopModelTest(TestCase):
+    def test_create_busstop(self):
+        stop = BusStop.objects.create(stop_id='S1', name='Main Stop', latitude=-33.9, longitude=18.4)
+        self.assertEqual(stop.name, 'Main Stop')
+
+```
+
+</details>
 <details> 
 <summary>mapper/views.py</summary>
 
